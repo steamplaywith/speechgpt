@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import { existEnvironmentVariable, getEnvironmentVariable } from '../helpers/utils';
 
@@ -26,6 +26,8 @@ const AzureSpeechToText: React.FC<AzureSpeechToTextProps> = ({
   accessCode,
 }) => {
   const [recognizer, setRecognizer] = useState<sdk.SpeechRecognizer | null>(null);
+
+  const timeoutRef = useRef();
 
   React.useEffect(() => {
     if (isListening) {
@@ -86,23 +88,25 @@ const AzureSpeechToText: React.FC<AzureSpeechToTextProps> = ({
     };
 
     newRecognizer.sessionStopped = (s, e) => {
+      // clear timeout
+      clearTimeout(timeoutRef.current);
       console.log('Session stopped');
       newRecognizer.stopContinuousRecognitionAsync();
       setIsListening(false);
       setWaiting(false);
     };
 
-    const timeout = setTimeout(() => {
-      newRecognizer.stopContinuousRecognitionAsync();
-      setIsListening(false);
-      setWaiting(false);
-      console.log('Speech recognition stopped due to timeout');
-    }, 2 * 60 * 1000);
 
     newRecognizer.startContinuousRecognitionAsync(
       () => {
         setWaiting(false);
         console.log('Listening...');
+        // start 5 minute timeout
+        timeoutRef.current = setTimeout(() => {
+          console.log('Timeout reached');
+          newRecognizer.stopContinuousRecognitionAsync();
+          setIsListening(false);
+        }, 2 * 60 * 1000);
       },
       error => {
         console.log(`Error: ${error}`);
