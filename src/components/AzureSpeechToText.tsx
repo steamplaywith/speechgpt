@@ -97,7 +97,7 @@ const AzureSpeechToText: React.FC<AzureSpeechToTextProps> = ({
       setIsListening(false);
       setWaiting(false);
       console.log('Speech recognition stopped due to timeout');
-    }, 5  * 1000);
+    }, 2 * 60 * 1000);
 
     newRecognizer.startContinuousRecognitionAsync(
       () => {
