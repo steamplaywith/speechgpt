@@ -27,7 +27,7 @@ const AzureSpeechToText: React.FC<AzureSpeechToTextProps> = ({
 }) => {
   const [recognizer, setRecognizer] = useState<sdk.SpeechRecognizer | null>(null);
 
-  const timeoutRef = useRef();
+  const timeoutRef = useRef<number | undefined>();
 
   React.useEffect(() => {
     if (isListening) {
