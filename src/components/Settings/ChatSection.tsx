@@ -18,9 +18,9 @@ interface ChatSectionProps {}
 
 const openaiModels = [
   'gpt-3.5-turbo',
-  'gpt-3.5-turbo-0301', // deprecated on June 1st, 2023
+  'gpt-3.5-turbo-1106', // deprecated on June 1st, 2023
   'gpt-4',
-  'gpt-4-0314', // deprecated on June 14th, 2023
+  'gpt-4-1106-preview', // deprecated on June 14th, 2023
   'gpt-4-32k',
   'gpt-4-32k-0314', // deprecated on June 14th, 2023
 ];
